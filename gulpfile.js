@@ -27,7 +27,7 @@ gulp.task('scripts', function () {
       path.basename += ".min"
     }))
     .pipe(sourcemaps.write('maps'))
-    .pipe(gulp.dest('js'))
+    .pipe(gulp.dest('dist/js'))
     .pipe(browserSync.stream())
 })
 

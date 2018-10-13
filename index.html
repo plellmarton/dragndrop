@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="dist/css/main.css">
+  <link rel="stylesheet" href="dist/css/main.min.css">
   <title>Document</title>
 </head>
+
 <body>
-  <div id="dragndrop"></div>
-  <script src="dist/dragndrop.min.js"></script>
+
+  <div id="dragndrop" class="dragndrop" data-component="dragndrop"></div>
+
+  <script src="dist/js/dragndrop.min.js"></script>
+  <script>
+    var dragndrop = new DragNDrop(document.getElementById('dragndrop'), {
+      repository: [
+        {
+          id: 1,
+          name: 'My first image',
+          url: 'http://placehold.it/320x200'
+        },
+        {
+          id: 2,
+          name: 'On the mountain',
+          url: 'http://placehold.it/320x200'
+        },
+        {
+          id: 3,
+          name: 'Lorem ipsum',
+          url: 'http://placehold.it/320x200'
+        }
+      ]
+    })
+  </script>
 </body>
+
 </html>

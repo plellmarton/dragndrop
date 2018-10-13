@@ -1,3 +1,3 @@
-body h1{color:red}
+body{background:#eee}.dragndrop{margin:10rem auto;width:80%;background:white;display:flex;box-sizing:border-box}.dragndrop__item{display:flex;flex:0 0 33.33%;align-items:flex-start;padding:0.5rem;background:white;box-shadow:2px 2px 20px rgba(0,0,0,0.1);margin:0.5rem;box-sizing:border-box;position:relative}.dragndrop__item-name{position:absolute;bottom:0;left:0;background-color:rgba(0,0,0,0.5);color:white;font-size:0.8rem;display:block;z-index:1;padding:3px 6px;font-family:sans-serif}.dragndrop__item img{max-width:100%;display:block}.dragndrop__repository,.dragndrop__dropzone{display:flex;flex:0 0 calc(50% - 2rem);flex-wrap:wrap;padding:1rem;margin:1rem;box-sizing:border-box}.dragndrop__repository{border:2px dashed #ccc}.dragndrop__dropzone{border:2px dashed #ccc}
 
 /*# sourceMappingURL=maps/main.min.css.map */

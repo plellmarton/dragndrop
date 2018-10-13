@@ -9,7 +9,10 @@ function DragNDrop(Container, options) {
 DragNDrop.prototype = {
   init: function (Container, options) {
     this.Container = Container
-    this.data = options
+    this.data = {
+      repository: options.repository,
+      dropzone: []
+    }
     this.update()
     this.Repository = this.Container.querySelectorAll('[data-ref="repository"]')[0]
     this.DropZone = this.Container.querySelectorAll('[data-ref="dropzone"]')[0]
@@ -42,17 +45,33 @@ DragNDrop.prototype = {
   },
 
   events: function () {
-    var items = this.Container.querySelectorAll('[data-ref="item"]')
-
     this.Container.addEventListener('dragstart', function (e) {
       var item = e.target
+      var moveFrom = e.path[1].getAttribute('data-ref')
       var dataIndex = parseInt(item.getAttribute('data-index'))
-      console.log('Drag started', e)
+
+      e.dataTransfer.setData('moveFrom', moveFrom)
+      e.dataTransfer.setData('item', JSON.stringify(this.data[moveFrom][dataIndex]))
+      e.dataTransfer.setData('itemIndex', dataIndex)
     }.bind(this))
 
     this.Container.addEventListener('drop', function (e) {
-      var dropzone = e.target
-      console.log('Dropped', dropzone)
+      var moveFrom = e.dataTransfer.getData('moveFrom')
+      var item = JSON.parse(e.dataTransfer.getData('item'))
+      var itemIndex = e.dataTransfer.getData('itemIndex')
+      var target = e.target.getAttribute('data-ref')
+
+      if (moveFrom !== target) {
+        var data = this.data
+        if (data[target] === undefined) {
+          data[target] = []
+        }
+        data[target].push(item)
+        data[moveFrom].splice(parseInt(itemIndex), 1)
+        console.log(parseInt(itemIndex))
+        this.data = data
+      }
+      this.update()
     }.bind(this))
 
     this.Container.addEventListener('dragover', function (e) {

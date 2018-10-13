@@ -11,6 +11,7 @@
 
 <body>
 
+  <pre id="data"></pre>
   <div id="dragndrop" class="dragndrop" data-component="dragndrop"></div>
 
   <script src="dist/js/dragndrop.min.js"></script>
@@ -34,6 +35,10 @@
         }
       ]
     })
+
+    setInterval(function () {
+      document.getElementById('data').innerHTML = JSON.stringify(dragndrop.data, null, 10)
+    }, 300)
   </script>
 </body>
 

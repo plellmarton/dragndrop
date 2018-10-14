@@ -1,4 +1,4 @@
-function DragNDrop (Container, options) {
+function DragNDrop(Container, options) {
   this.Container = null
   this.Repository = []
   this.DropZone = []
@@ -46,6 +46,7 @@ DragNDrop.prototype = {
   update: function () {
     var output = this.render()
     this.Container.innerHTML = output
+    console.log(this.data)
   },
 
   events: function () {
@@ -92,6 +93,8 @@ DragNDrop.prototype = {
       e.preventDefault()
     } else if (target === 'repository') {
       e.preventDefault()
+    } else if (e.path[1].getAttribute('data-ref') === 'item') {
+      e.preventDefault()
     }
   },
 
@@ -118,18 +121,28 @@ DragNDrop.prototype = {
     var item = JSON.parse(e.dataTransfer.getData('item'))
     var itemIndex = e.dataTransfer.getData('itemIndex')
     var target = e.target.getAttribute('data-ref')
-    var insertBeforeIndex = e.dataTransfer.getData('insertBeforeIndex')
-
-    if (moveFrom !== target) {
-      var data = this.data
-      if (data[target] === undefined) {
-        data[target] = []
-      }
-      data[target].push(item)
-      data[moveFrom].splice(parseInt(itemIndex), 1)
-      this.data = data
+    var isInsertBefore = false
+    if (target === null) {
+      target = e.path[2].getAttribute('data-ref')
+      var beforeItem = e.path[1]
+      var beforeIndex = parseInt(beforeItem.getAttribute('data-index'))
+      isInsertBefore = true
     }
-    console.log(e)
+    console.log(target)
+
+    var data = this.data
+
+    data[moveFrom].splice(parseInt(itemIndex), 1)
+    if (data[target] === undefined) {
+      data[target] = []
+    }
+    if (isInsertBefore) {
+      data[target].splice(beforeIndex, 0, item)
+    } else {
+      data[target].push(item)
+    }
+
+    this.data = data
     this.update()
   },
 

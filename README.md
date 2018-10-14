@@ -1,3 +1,2 @@
-![MrDropper](https://raw.githubusercontent.com/plellmarton/dragndrop/master/mrdropper-logo.png?s=200)
-
+<img src="https://raw.githubusercontent.com/plellmarton/dragndrop/master/mrdropper-logo.png" width=400>
 A simple drag and drop script written in JavaScript.

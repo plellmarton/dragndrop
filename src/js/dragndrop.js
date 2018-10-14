@@ -27,16 +27,18 @@ DragNDrop.prototype = {
     var template = '<div class="dragndrop__item" draggable="true" data-ref="item" data-id="{{img.id}}" data-index="{{index}}">' +
       '<img src="{{img.src}}" alt="{{img.name}}" draggable="false">' +
       '<span class="dragndrop__item-name" draggable="false">{{img.name}}</span>' +
+      '<i class="dragndrop__item-index">{{index1}}</i>' +
       '</div>'
 
     var variables = {
       '{{index}}': index,
+      '{{index1}}': index + 1,
       '{{img.id}}': data.id,
       '{{img.src}}': data.url,
       '{{img.name}}': data.name
     }
 
-    template = template.replace(/{{img.src}}|{{img.name}}|{{img.id}}|{{index}}/gi, function (matched) {
+    template = template.replace(/{{img.src}}|{{img.name}}|{{img.id}}|{{index}}|{{index1}}/gi, function (matched) {
       return variables[matched]
     })
 
@@ -46,7 +48,6 @@ DragNDrop.prototype = {
   update: function () {
     var output = this.render()
     this.Container.innerHTML = output
-    console.log(this.data)
   },
 
   events: function () {
@@ -54,7 +55,7 @@ DragNDrop.prototype = {
     this.Container.addEventListener('drag', this.dragHandler)
     this.Container.addEventListener('dragend', this.dragEndHandler.bind(this))
     this.Container.addEventListener('drop', this.dropHandler.bind(this))
-    this.Container.addEventListener('dragover', this.dragOverHandler)
+    this.Container.addEventListener('dragover', this.dragOverHandler.bind(this))
   },
 
   dragStartHandler: function (e) {
@@ -89,12 +90,17 @@ DragNDrop.prototype = {
 
   dragOverHandler: function (e) {
     var target = e.target.getAttribute('data-ref')
+    var placeholders = this.Container.querySelectorAll('.insert-placeholder')
+    placeholders.forEach(function (element) {
+      element.classList.remove('insert-placeholder')
+    })
     if (target === 'dropzone') {
       e.preventDefault()
     } else if (target === 'repository') {
       e.preventDefault()
     } else if (e.path[1].getAttribute('data-ref') === 'item') {
       e.preventDefault()
+      e.path[1].classList.add('insert-placeholder')
     }
   },
 
@@ -128,7 +134,6 @@ DragNDrop.prototype = {
       var beforeIndex = parseInt(beforeItem.getAttribute('data-index'))
       isInsertBefore = true
     }
-    console.log(target)
 
     var data = this.data
 

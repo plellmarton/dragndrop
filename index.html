@@ -11,7 +11,6 @@
 
 <body>
 
-  <pre id="data"></pre>
   <div id="dragndrop" class="dragndrop" data-component="dragndrop"></div>
 
   <script src="dist/js/dragndrop.min.js"></script>
@@ -21,24 +20,55 @@
         {
           id: 1,
           name: 'My first image',
-          url: 'http://placehold.it/320x200'
+          url: 'https://picsum.photos/320/200/?image=1084'
         },
         {
           id: 2,
           name: 'On the mountain',
-          url: 'http://placehold.it/320x200'
+          url: 'https://picsum.photos/320/200/?image=1078'
         },
         {
           id: 3,
           name: 'Lorem ipsum',
-          url: 'http://placehold.it/320x200'
+          url: 'https://picsum.photos/320/200/?image=1082'
+        },
+        {
+          id: 4,
+          name: 'Lorem ipsum',
+          url: 'https://picsum.photos/320/200/?image=1075'
+        },
+        {
+          id: 5,
+          name: 'Lorem ipsum',
+          url: 'https://picsum.photos/320/200/?image=1074'
+        },
+        {
+          id: 6,
+          name: 'Lorem ipsum',
+          url: 'https://picsum.photos/320/200/?image=1060'
+        },
+        {
+          id: 7,
+          name: 'Lorem ipsum',
+          url: 'https://picsum.photos/320/200/?image=1061'
+        },
+        {
+          id: 8,
+          name: 'Lorem ipsum',
+          url: 'https://picsum.photos/320/200/?image=1062'
+        },
+        {
+          id: 9,
+          name: 'Lorem ipsum',
+          url: 'https://picsum.photos/320/200/?image=1063'
+        },
+        {
+          id: 10,
+          name: 'Lorem ipsum',
+          url: 'https://picsum.photos/320/200/?image=1064'
         }
       ]
     })
-
-    setInterval(function () {
-      document.getElementById('data').innerHTML = JSON.stringify(dragndrop.data, null, 10)
-    }, 300)
   </script>
 </body>
 

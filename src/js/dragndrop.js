@@ -1,8 +1,9 @@
-function DragNDrop(Container, options) {
-  this.Container
-  this.Repository
-  this.DropZone
-  this.data
+function DragNDrop (Container, options) {
+  this.Container = null
+  this.Repository = []
+  this.DropZone = []
+  this.data = {}
+  this.PlaceHolder = ''
   this.init(Container, options)
 }
 
@@ -16,6 +17,9 @@ DragNDrop.prototype = {
     this.update()
     this.Repository = this.Container.querySelectorAll('[data-ref="repository"]')[0]
     this.DropZone = this.Container.querySelectorAll('[data-ref="dropzone"]')[0]
+    var PlaceHolder = document.createElement('div')
+    PlaceHolder.className = 'dragndrop__placeholder'
+    this.PlaceHolder = PlaceHolder
     this.events()
   },
 
@@ -45,43 +49,88 @@ DragNDrop.prototype = {
   },
 
   events: function () {
-    this.Container.addEventListener('dragstart', function (e) {
-      var item = e.target
-      var moveFrom = e.path[1].getAttribute('data-ref')
-      var dataIndex = parseInt(item.getAttribute('data-index'))
+    this.Container.addEventListener('dragstart', this.dragStartHandler.bind(this))
+    this.Container.addEventListener('drag', this.dragHandler)
+    this.Container.addEventListener('dragend', this.dragEndHandler.bind(this))
+    this.Container.addEventListener('drop', this.dropHandler.bind(this))
+    this.Container.addEventListener('dragover', this.dragOverHandler)
+  },
 
-      e.dataTransfer.setData('moveFrom', moveFrom)
-      e.dataTransfer.setData('item', JSON.stringify(this.data[moveFrom][dataIndex]))
-      e.dataTransfer.setData('itemIndex', dataIndex)
-    }.bind(this))
+  dragStartHandler: function (e) {
+    var item = e.target
+    var moveFrom = e.path[1].getAttribute('data-ref')
+    var dataIndex = parseInt(item.getAttribute('data-index'))
 
-    this.Container.addEventListener('drop', function (e) {
-      var moveFrom = e.dataTransfer.getData('moveFrom')
-      var item = JSON.parse(e.dataTransfer.getData('item'))
-      var itemIndex = e.dataTransfer.getData('itemIndex')
-      var target = e.target.getAttribute('data-ref')
+    var crt = e.target.cloneNode(true)
+    crt.style.display = 'none'
+    crt.style.visibility = 'hidden'
+    document.body.appendChild(crt)
+    e.dataTransfer.setDragImage(crt, 0, 0)
 
-      if (moveFrom !== target) {
-        var data = this.data
-        if (data[target] === undefined) {
-          data[target] = []
-        }
-        data[target].push(item)
-        data[moveFrom].splice(parseInt(itemIndex), 1)
-        console.log(parseInt(itemIndex))
-        this.data = data
+    e.dataTransfer.setData('moveFrom', moveFrom)
+    e.dataTransfer.setData('item', JSON.stringify(this.data[moveFrom][dataIndex]))
+    e.dataTransfer.setData('itemIndex', dataIndex)
+  },
+
+  dragHandler: function (e) {
+    var item = e.target
+    var width = item.offsetWidth
+    var height = item.offsetHeight
+
+    item.style.width = width + 'px'
+    item.style.position = 'absolute'
+    item.style.top = e.clientY - (height / 2) + 'px'
+    item.style.left = e.clientX - (width / 2) + 'px'
+    item.style.transform = 'rotate(5deg)'
+    item.style.zIndex = 1000
+    item.style.pointerEvents = 'none'
+  },
+
+  dragOverHandler: function (e) {
+    var target = e.target.getAttribute('data-ref')
+    if (target === 'dropzone') {
+      e.preventDefault()
+    } else if (target === 'repository') {
+      e.preventDefault()
+    }
+  },
+
+  dragEndHandler: function (e) {
+    var item = e.target
+    var moveFrom = e.path[1].getAttribute('data-ref')
+    var dataIndex = parseInt(item.getAttribute('data-index'))
+
+    item.style.width = ''
+    item.style.position = ''
+    item.style.top = ''
+    item.style.left = ''
+    item.style.transform = 'rotate(0)'
+    item.style.zIndex = ''
+    item.style.pointerEvents = ''
+
+    e.dataTransfer.setData('moveFrom', moveFrom)
+    e.dataTransfer.setData('item', JSON.stringify(this.data[moveFrom][dataIndex]))
+    e.dataTransfer.setData('itemIndex', dataIndex)
+  },
+
+  dropHandler: function (e) {
+    var moveFrom = e.dataTransfer.getData('moveFrom')
+    var item = JSON.parse(e.dataTransfer.getData('item'))
+    var itemIndex = e.dataTransfer.getData('itemIndex')
+    var target = e.target.getAttribute('data-ref')
+    var insertBeforeIndex = e.dataTransfer.getData('insertBeforeIndex')
+
+    if (moveFrom !== target) {
+      var data = this.data
+      if (data[target] === undefined) {
+        data[target] = []
       }
-      this.update()
-    }.bind(this))
-
-    this.Container.addEventListener('dragover', function (e) {
-      var target = e.target.getAttribute('data-ref')
-      if(target === 'dropzone') {
-        e.preventDefault()
-      } else if (target === 'repository') {
-        e.preventDefault()
-      }
-    }.bind(this))
+      data[target].push(item)
+      data[moveFrom].splice(parseInt(itemIndex), 1)
+      this.data = data
+    }
+    console.log(e)
+    this.update()
   },
 
   render: function () {

@@ -3,27 +3,25 @@ body {
 }
 
 .dragndrop {
-  margin: 10rem auto;
+  margin: 4rem auto;
   width: 80%;
-  background: white;
   display: flex;
   box-sizing: border-box;
 
   &__item {
     display: flex;
-    flex: 0 0 33.33%;
-    align-items: flex-start;
-    padding: 0.5rem;
-    background: white;
-    box-shadow: 2px 2px 20px rgba(black, 0.1);
-    margin: 0.5rem;
+    flex: 0 calc(33% - 1rem);
+    align-items: center;
+    padding: 0;
     box-sizing: border-box;
+    cursor: move;
     position: relative;
+    margin: 0 0.5rem 0.5rem 0.5rem;
 
     &-name {
       position: absolute;
-      bottom: 0;
-      left: 0;
+      bottom: 4px;
+      left: 4px;
       background-color: rgba(black, 0.5);
       color: white;
       font-size: 0.8rem;
@@ -34,17 +32,30 @@ body {
     }
 
     img {
+      box-shadow: 0 0 6px 1px rgba(black, 0.2);
+      border: 4px solid white;
       max-width: 100%;
       display: block;
     }
+  }
+
+  &__placeholder {
+    @extend .dragndrop__item;
+    
+    box-shadow: none;
+    height: 100%;
+    border: 2px solid springgreen;
   }
 
   &__repository, &__dropzone {
     display: flex;
     flex: 0 0 calc(50% - 2rem);
     flex-wrap: wrap;
-    padding: 1rem;
-    margin: 1rem;
+    align-items: flex-start;
+    align-content: flex-start;
+    padding: 1rem 0.5rem;
+    margin: 1rem 0.5rem;
+    min-height: 70vh;
     box-sizing: border-box;
   }
   &__repository {

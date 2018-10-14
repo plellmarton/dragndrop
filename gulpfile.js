@@ -1,9 +1,9 @@
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var rename = require("gulp-rename");
-var browserSync = require('browser-sync').create();
+var gulp = require('gulp')
+var sass = require('gulp-sass')
+var uglify = require('gulp-uglify')
+var sourcemaps = require('gulp-sourcemaps')
+var rename = require('gulp-rename')
+var browserSync = require('browser-sync').create()
 
 gulp.task('styles', function () {
   return gulp.src('src/sass/main.scss')
@@ -12,7 +12,7 @@ gulp.task('styles', function () {
       outputStyle: 'compressed'
     }).on('error', sass.logError))
     .pipe(rename(function (path) {
-      path.basename += ".min"
+      path.basename += '.min'
     }))
     .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('dist/css'))
@@ -24,7 +24,7 @@ gulp.task('scripts', function () {
     .pipe(sourcemaps.init())
     .pipe(uglify())
     .pipe(rename(function (path) {
-      path.basename += ".min"
+      path.basename += '.min'
     }))
     .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('dist/js'))
@@ -35,8 +35,8 @@ gulp.task('scripts', function () {
 gulp.task('watch', function () {
   browserSync.init({
     proxy: 'http://dragndrop.local'
-  });
+  })
 
   gulp.watch('./src/sass/**/*.scss', gulp.series('styles'))
   gulp.watch('./src/js/**/*.js', gulp.series('scripts'))
-});
+})
